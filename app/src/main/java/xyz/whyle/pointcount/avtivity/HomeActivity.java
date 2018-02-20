@@ -1,27 +1,33 @@
 package xyz.whyle.pointcount.avtivity;
 
-import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.app.*;
+import android.content.*;
+import android.content.res.*;
+import android.os.*;
+import android.support.design.widget.*;
+import android.support.v4.view.*;
+import android.support.v4.widget.*;
+import android.support.v7.app.*;
+import android.support.v7.widget.*;
+import android.view.*;
+import android.view.View.*;
+import android.widget.*;
+import android.widget.RadioGroup.*;
+import java.util.*;
+import xyz.whyle.pointcount.*;
+import xyz.whyle.pointcount.adapter.*;
+import xyz.whyle.pointcount.base.*;
+import xyz.whyle.pointcount.fragment.*;
+import xyz.whyle.pointcount.viewmodule.*;
+
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
-
-import xyz.whyle.pointcount.adapter.HomeViewPagerAdapter;
-import xyz.whyle.pointcount.base.BaseActivity;
-import xyz.whyle.pointcount.fragment.HomeTabFragment1;
-import xyz.whyle.pointcount.fragment.HomeTabFragment2;
-import xyz.whyle.pointcount.fragment.HomeTabFragment3;
-import xyz.whyle.pointcount.fragment.HomeTabFragment4;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import xyz.whyle.pointcount.viewmodule.CircleImageView;
-import xyz.whyle.pointcount.R;
 
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity
+{
 
     private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
@@ -29,29 +35,159 @@ public class HomeActivity extends BaseActivity {
     private CircleImageView currentUserAvater;
     private TextView currentUserName;
     private TextView currentUserSignature;
+    public static TabLayout tabLayout;
+    public static ViewPager viewPager;
+    public static HomeViewPagerAdapter adapter;
 
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private HomeViewPagerAdapter adapter;
+	public String s;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+	{
         super.onCreate(savedInstanceState);
 
-        initContentView();
-        initViews();
-        initListeners();
-        initData();
-    }
+	}
+
+	public void addPerson()
+	{
+		// Get layout
+		View layout = LayoutInflater.from(this).inflate(R.layout.add_person, null);
+		final EditText name = (EditText)layout.findViewById(R.id.add_person_name);
+		final RadioGroup sex  = (RadioGroup)layout.findViewById(R.id.add_person_sex);
+		final EditText born = (EditText) layout.findViewById(R.id.add_person_born);
+		final EditText phone = (EditText)layout.findViewById(R.id.add_person_phone);
+		final RadioGroup group = (RadioGroup) layout.findViewById(R.id.add_person_group);
+		final EditText address = (EditText)layout.findViewById(R.id.add_person_address);
+		//address.setRawInputType(Configuration.KEYBOARD_QWERTY);
+		address.setRawInputType(Configuration.KEYBOARD_QWERTY);
+		// Select date
+		born.setOnFocusChangeListener(new OnFocusChangeListener(){
+
+				@Override
+				public void onFocusChange(View p1, boolean p2)
+				{
+					// TODO: Implement this method
+					String text = born.getText().toString();
+					if (text.isEmpty()&&p2)
+					{
+						Calendar c = Calendar.getInstance();
+						new DatePickerDialog(HomeActivity.this, new DatePickerDialog.OnDateSetListener(){
+
+								@Override
+								public void onDateSet(DatePicker p1, int p2, int p3, int p4)
+								{
+									born.setText(p4 + "/" + p3 + "/" + p2);
+									born.clearFocus();
+								}
+							}, 2000, c.get(Calendar.MONTH), c.get(c.DAY_OF_MONTH)).show();
+					}
+				}
+			});
+
+		// Create dialog
+		AlertDialog add = new AlertDialog.Builder(this)
+			.setTitle("Add new person.")
+			.setView(layout)
+			.setCancelable(false)
+			.setPositiveButton("Add", null)
+			.setNegativeButton("Cancel", null)
+			.show();
+		add.getButton(Dialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
+				boolean hasError = false;
+				String sex_text;
+				String group_text;
+				@Override
+				public void onClick(View p1)
+				{
+
+					String name_text = name.getText().toString();
+					String born_text = born.getText().toString();
+					String phone_text = phone.getText().toString();
+					String address_text = address.getText().toString();
+
+					if (name_text.length() >= 2) // if it has 2 words
+					{
+						name.setError("Invalied Text");
+						hasError = true;
+					}
+
+					if (born_text.isEmpty())
+					{
+						born.setError("Please inserit date");
+						hasError = true;
+					}
+
+					if (!born_text.contains("/") && born_text.length() > 10 &&born_text.length() < 8)
+					{
+						born.setError("Error data Format");
+						hasError = true;
+					}
+
+					if (phone_text.isEmpty())
+					{
+						phone.setError("Please inserit phone number!");
+						hasError = true;
+					}
+
+					if (phone_text.trim().length() < 10 && phone_text.trim().length() >= 14)
+					{
+						phone.setError("Please inserit correct phone number!");
+						hasError = true;
+					}
+
+					sex.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+							@Override
+							public void onCheckedChanged(RadioGroup p1, int p2)
+							{
+								if (p2 == R.id.add_person_sex_m)
+								{
+									sex_text = "M";
+								}
+								else
+								{
+									sex_text = "F";
+								}
+							}
+						});
+					group.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+
+							@Override
+							public void onCheckedChanged(RadioGroup p1, int p2)
+							{
+								if (p2 == R.id.add_person_group_1)
+								{
+									group_text = "1";
+								}
+								else if (p2 == R.id.add_person_group_2)
+								{
+									group_text = "2";
+								}
+								else
+								{
+									group_text = "3";
+								}
+							}
+						});
+					if (hasError)
+						return;
+					// upload files
+
+				}
+			});
+	}
 
     @Override
-    public void initContentView() {
-
+    public void initContentView()
+	{
         setContentView(R.layout.activity_home);
+		addPerson();
     }
 
     @Override
-    public void initViews() {
+    public void initViews()
+	{
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,26 +198,51 @@ public class HomeActivity extends BaseActivity {
         viewPager = (ViewPager) findViewById(R.id.pager);
 
 
+		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view)
+				{
 
-        if (viewPager != null) {
-            setupViewPager(viewPager);
-        }
+					AlertDialog.Builder dialog = new AlertDialog.Builder(HomeActivity.this);
+					dialog.setTitle("Add Point");
+					View layout = LayoutInflater.from(HomeActivity.this).inflate(R.layout.point, null);
+					dialog.setMessage("Please Type number of Points.");
+					dialog.setView(layout);
+					final EditText a = (EditText) layout.findViewById(R.id.a);
+					final EditText b = (EditText) layout.findViewById(R.id.b);
+					final EditText c = (EditText) layout.findViewById(R.id.c);
+					dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
 
+							@Override
+							public void onClick(DialogInterface p1, int p2)
+							{
+								// TODO: Implement this method  
+								String aa = a.getText().toString().trim();
+								String bb = b.getText().toString().trim();
+								String cc = c.getText().toString().trim();
 
+								aa = (aa.isEmpty() ? "0" : aa);
+								bb = (bb.isEmpty() ? "0" : bb);
+								cc = (cc.isEmpty() ? "0" : cc);
 
+								//	put(Integer.valueOf(aa), Integer.valueOf(bb), Integer.valueOf(cc));
+							}
+						});
+					dialog.setNegativeButton("Cancel", null);
+					dialog.setCancelable(false);
+					dialog.show();
+				}
+			});
         /**
-         * init DrawLayout+Navigation
+         * init DrawLayout
          */
-
         ActionBarDrawerToggle mActionBarDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, toolbar, R.string.open, R.string.close);
         mActionBarDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mActionBarDrawerToggle);
-        mNavigationView.inflateHeaderView(R.layout.navigation_header);
-        mNavigationView.inflateMenu(R.menu.menu_navigation);
 
         // 设置NavigationView中menu的item被选中后要执行的操作
         onNavgationViewMenuItemSelected(mNavigationView);
-
 
         /**
          * 当前用户信息
@@ -95,18 +256,23 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
-    public void initListeners() {}
+    public void initListeners()
+	{
 
-
+	}
 
     @Override
-    public void initData() {
+    public void initData()
+	{
 
         currentUserAvater.setImageResource(R.drawable.default_avater);
-        currentUserName.setText("肉肉仔");
+        currentUserName.setText("Admin");
         currentUserSignature.setText("平静温和地前进");
-
-    }
+		if (viewPager != null)
+		{
+			setupViewPager(viewPager); // set View
+        }
+	}
 
 
 
@@ -114,14 +280,15 @@ public class HomeActivity extends BaseActivity {
      * 设置ViewPager+Fragment
      * @param viewPager
      */
-    private void setupViewPager(ViewPager viewPager) {
+    private void setupViewPager(ViewPager viewPager)
+	{
         adapter = new HomeViewPagerAdapter(getSupportFragmentManager(), this);
-        adapter.addFragment(new HomeTabFragment1().newInstance("Page1"), "视频");
-        adapter.addFragment(new HomeTabFragment2().newInstance("Page2"), "音乐");
-        adapter.addFragment(new HomeTabFragment3().newInstance("Page3"), "新闻");
-        adapter.addFragment(new HomeTabFragment4().newInstance("Page4"), "娱乐");
-        viewPager.setAdapter(adapter);
+        adapter.addFragment(new HomeTabFragment1().newInstance("Page1"), "第一组");
+        adapter.addFragment(new HomeTabFragment2().newInstance("Page2"), "第二组");
+        adapter.addFragment(new HomeTabFragment3().newInstance("Page3"), "第三组");
+	    viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
+
     }
 
 
@@ -131,47 +298,54 @@ public class HomeActivity extends BaseActivity {
      *
      * @param mNav
      */
-    private void onNavgationViewMenuItemSelected(NavigationView mNav) {
+    private void onNavgationViewMenuItemSelected(NavigationView mNav)
+	{
         mNav.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
+				@Override
+				public boolean onNavigationItemSelected(MenuItem menuItem)
+				{
 
-                String msgString = "";
+					String msgString = "";
 
-                switch (menuItem.getItemId()) {
+					switch (menuItem.getItemId())
+					{
 
-                    // do your business here eg:
-                    // case R.id.nav_menu_home:
-                    //    msgString = (String) menuItem.getTitle();
-                    //     break;
+							// do your business here eg:
+							// case R.id.nav_menu_home:
+							//    msgString = (String) menuItem.getTitle();
+							//     break;
 
-                }
+					}
 
-                // Menu item点击后选中，并关闭Drawerlayout
-                menuItem.setChecked(true);
-                mDrawerLayout.closeDrawers();
-                return true;
-            }
-        });
+					// Menu item点击后选中，并关闭Drawerlayout
+					menuItem.setChecked(true);
+					mDrawerLayout.closeDrawers();
+					return true;
+				}
+			});
     }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+	{
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onOptionsItemSelected(MenuItem item)
+	{
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings)
+		{
+			invalidata("admin");
             return true;
         }
 

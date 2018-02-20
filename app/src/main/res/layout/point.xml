@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal">
+
+	<EditText
+		android:inputType="numberDecimal|numberSigned"
+		android:layout_width="wrap_content"
+		android:ems="3"
+		android:layout_height="wrap_content"
+		android:layout_weight="1"
+		android:hint="①"
+		android:id="@+id/a"
+		android:maxEms="3"/>
+
+	<EditText
+		android:inputType="numberDecimal|numberSigned"
+		android:layout_width="wrap_content"
+		android:ems="3"
+		android:layout_height="wrap_content"
+		android:layout_weight="1.0"
+		android:hint="②"
+		android:id="@+id/b"
+		android:maxEms="3"/>
+
+	<EditText
+		android:inputType="numberDecimal|numberSigned"
+		android:layout_width="wrap_content"
+		android:ems="3"
+		android:layout_height="wrap_content"
+		android:layout_weight="1.0"
+		android:hint="③"
+		android:id="@+id/c"
+		android:maxEms="3"/>
+
+</LinearLayout>
+
