@@ -1,22 +1,14 @@
 package xyz.whyle.pointcount.base;
 
 
-import android.app.ProgressDialog;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import java.io.IOException;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
-import xyz.whyle.pointcount.Utils;
-import xyz.whyle.pointcount.adapter.HomeViewPagerAdapter;
-import xyz.whyle.pointcount.app.App;
-import xyz.whyle.pointcount.avtivity.HomeActivity;
-import xyz.whyle.pointcount.fragment.HomeTabFragment1;
-import xyz.whyle.pointcount.fragment.HomeTabFragment2;
-import xyz.whyle.pointcount.fragment.HomeTabFragment3;
+import android.app.*;
+import android.os.*;
+import android.support.v7.app.*;
+import android.util.*;
+import java.io.*;
+import okhttp3.*;
+import xyz.whyle.pointcount.*;
+import xyz.whyle.pointcount.app.*;
 
 
 /**
@@ -37,59 +29,69 @@ public abstract class BaseActivity extends AppCompatActivity
 		initContentView();
 		initViews();
 		initListeners();
-		invalidata("admin");
+		initData();
     }
 
-	public void invalidata(String user)
-	{
-		Log.i(TAG + "invalidata()", "-------->Start invalidata with user:" + user);
-
-		// Progress Dialog
-		load = new ProgressDialog(this);
-		load.setMessage("Getting Data");
-		load.setCancelable(false);
-		Log.i(TAG + "invalidata()", "-------->Dialog:" + load);
-
-		App.connectServer(Utils.GET, Utils.getFrom(user)).newCall(App.request).enqueue(new Callback() 
-			{
-				@Override
-				public void onFailure(Call call, final IOException e)
-				{
-					App.mHandler.post(new Runnable() {
-							@Override
-							public void run()
-							{
-								Log.i(TAG + "invalidata()", "------->Call falied:" + e.toString());
-							}
-						});		
-				}
-				
-				@Override
-				public void onResponse(Call call, final Response response)
-				{
-					App.mHandler.post(new Runnable() {
-
-							@Override
-							public void run()
-							{
-								try
-								{
-									App.body = response.body().string();
-									initData();
-									load.dismiss();
-									Log.i(TAG + "invalidata()", "-------->Dialog:" + App.body);
-
-								}
-								catch (IOException e)
-								{
-									Log.i(TAG + "invalidata()", "------->Falied get string:" + e.toString());
-								}
-							}
-						});			
-				}
-			});
-	}
-
+//	public void invalidata(String user)
+//	{
+//		Log.i(TAG + "invalidata()", "-------->Start invalidata with user:" + user);
+//		// Progress Dialog
+//		load = new ProgressDialog(this);
+//		load.setMessage("Getting Data");
+//		load.setCancelable(false);
+//		Log.i(TAG + "invalidata()", "-------->Dialog:" + load);
+//
+//		OkHttpClient request = App.connectServer(Utils.GET, Utils.getFrom(user));
+//		Call call = request.newCall(App.request);
+//		call.enqueue(new Callback() 
+//			{
+//				@Override
+//				public void onFailure(Call call, final IOException e)
+//				{
+//					App.mHandler.post(new Runnable() {
+//							@Override
+//							public void run()
+//							{
+//								Log.i(TAG + "invalidata()", "------->Call falied:" + e.toString());
+//							}
+//						});		
+//				}
+//				
+//				@Override
+//				public void onResponse(Call call, final Response response)
+//				{
+//					Runnable get = new Runnable() {
+//
+//						@Override
+//							public void run()
+//							{
+//								try
+//								{
+//									App.body = response.body().string();
+//									Log.i(TAG + "invalidata()", "-------->Dialog:" + App.body);
+//								}
+//								catch (IOException e)
+//								{
+//									Log.i(TAG + "invalidata()", "------->Falied get string:" + e.toString());
+//								}
+//							}};
+//						
+//					try
+//					{
+//						Thread t = new Thread(get);  
+//						t.start();
+//						t.join();
+//						initData();
+//						load.dismiss();
+//						Log.i("--","getted");
+//					}
+//					catch (InterruptedException e)
+//					{} 
+//						
+//				}
+//			});
+//	}
+//
     /**
      * 加载布局文件
      */

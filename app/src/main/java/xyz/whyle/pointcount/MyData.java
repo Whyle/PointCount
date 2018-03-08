@@ -1,62 +1,145 @@
 package xyz.whyle.pointcount;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+import java.util.List;
+
 public class MyData
 {
-	public static String group1;
-	public static String group2;
-	public static String group3;
-	public static String time;
-	public static String from;
+	// {
+    //   "data":[{"name": "李雅洁"},
+    //           {"name": "卓毅豪"}],
+    //   "group":"3"
+    // }
 
-	public MyData()
-	{}
+	@SerializedName("group")
+	@Expose
+	private String group;
+	
+	@SerializedName("data")
+	@Expose
+    private List<Data> data;
 
-	public static void setGroup1(String group1)
+	public void setGroup(String group)
 	{
-		MyData.group1 = String.valueOf(group1);
+		this.group = group;
 	}
 
-	public static String getGroup1()
+	public String getGroup()
 	{
-		return group1;
+		return group;
 	}
 
-	public static void setGroup2(String group2)
+	public void setData(List<Data> data)
 	{
-		MyData.group2 = String.valueOf(group2);
+		this.data = data;
 	}
 
-	public static String getGroup2()
+	public List<Data> getData()
 	{
-		return group2;
+		return data;
 	}
 
-	public static void setGroup3(String group3)
-	{
-		MyData.group3 = String.valueOf(group3);
-	}
+    
+	
+    public class Data {
 
-	public static String getGroup3()
-	{
-		return group3;
-	}
+		@SerializedName("id")
+		@Expose
+        private  String id;
+		
+		@SerializedName("name")
+		@Expose
+        private  String name;
+		
+		@SerializedName("sex")
+		@Expose
+        private String sex;
+		
+		@SerializedName("birthday")
+		@Expose
+        private String birthday;
+		
+		@SerializedName("phone")
+		@Expose
+        private String phone;
+		
+		@SerializedName("group")
+		@Expose
+        private String group;
+		
+		@SerializedName("address")
+		@Expose
+        private String address;
+		
+		public void setId(String id)
+		{
+			this.id = id;
+		}
 
-	public static void setTime(String time)
-	{
-		MyData.time = time;
-	}
+		public String getId()
+		{
+			return id;
+		}
+		
+		public void setName(String name)
+		{
+			this.name = name;
+		}
 
-	public static String getTime()
-	{
-		return time;
-	}
+		public String getName()
+		{
+			return name;
+		}
 
-	public static void setFrom(String from)
-	{
-		MyData.from = from;
-	}
+		public void setSex(String sex)
+		{
+			this.sex = sex;
+		}
 
-	public static String getFrom()
-	{
-		return from;
-	}}
+		public String getSex()
+		{
+			return sex;
+		}
+
+		public void setBirthday(String birthday)
+		{
+			this.birthday = birthday;
+		}
+
+		public String getBirthday()
+		{
+			return birthday;
+		}
+
+		public void setPhone(String phone)
+		{
+			this.phone = phone;
+		}
+
+		public String getPhone()
+		{
+			return phone;
+		}
+
+		public void setGroup(String group)
+		{
+			this.group = group;
+		}
+
+		public String getGroup()
+		{
+			return group;
+		}
+
+		public void setAddress(String address)
+		{
+			this.address = address;
+		}
+
+		public String getAddress()
+		{
+			return address;
+		}
+	}
+}

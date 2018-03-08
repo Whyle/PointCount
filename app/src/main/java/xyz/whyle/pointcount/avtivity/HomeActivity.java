@@ -1,35 +1,33 @@
 package xyz.whyle.pointcount.avtivity;
 
-import android.app.*;
 import android.content.*;
-import android.content.res.*;
 import android.os.*;
 import android.support.design.widget.*;
 import android.support.v4.view.*;
 import android.support.v4.widget.*;
 import android.support.v7.app.*;
 import android.support.v7.widget.*;
+import android.util.*;
 import android.view.*;
-import android.view.View.*;
 import android.widget.*;
-import android.widget.RadioGroup.*;
-import java.util.*;
+import com.google.android.gms.common.api.*;
+import com.google.android.gms.location.places.*;
+import com.google.android.gms.location.places.ui.*;
 import xyz.whyle.pointcount.*;
 import xyz.whyle.pointcount.adapter.*;
+import xyz.whyle.pointcount.app.*;
 import xyz.whyle.pointcount.base.*;
 import xyz.whyle.pointcount.fragment.*;
+import xyz.whyle.pointcount.server.*;
 import xyz.whyle.pointcount.viewmodule.*;
 
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import xyz.whyle.pointcount.viewmodule.CircleImageView;
 
 public class HomeActivity extends BaseActivity
 {
 
-    private DrawerLayout mDrawerLayout;
+	private DrawerLayout mDrawerLayout;
     private NavigationView mNavigationView;
     private Toolbar toolbar;
     private CircleImageView currentUserAvater;
@@ -38,151 +36,13 @@ public class HomeActivity extends BaseActivity
     public static TabLayout tabLayout;
     public static ViewPager viewPager;
     public static HomeViewPagerAdapter adapter;
-
 	public String s;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-	{
-        super.onCreate(savedInstanceState);
-
-	}
-
-	public void addPerson()
-	{
-		// Get layout
-		View layout = LayoutInflater.from(this).inflate(R.layout.add_person, null);
-		final EditText name = (EditText)layout.findViewById(R.id.add_person_name);
-		final RadioGroup sex  = (RadioGroup)layout.findViewById(R.id.add_person_sex);
-		final EditText born = (EditText) layout.findViewById(R.id.add_person_born);
-		final EditText phone = (EditText)layout.findViewById(R.id.add_person_phone);
-		final RadioGroup group = (RadioGroup) layout.findViewById(R.id.add_person_group);
-		final EditText address = (EditText)layout.findViewById(R.id.add_person_address);
-		//address.setRawInputType(Configuration.KEYBOARD_QWERTY);
-		address.setRawInputType(Configuration.KEYBOARD_QWERTY);
-		// Select date
-		born.setOnFocusChangeListener(new OnFocusChangeListener(){
-
-				@Override
-				public void onFocusChange(View p1, boolean p2)
-				{
-					// TODO: Implement this method
-					String text = born.getText().toString();
-					if (text.isEmpty()&&p2)
-					{
-						Calendar c = Calendar.getInstance();
-						new DatePickerDialog(HomeActivity.this, new DatePickerDialog.OnDateSetListener(){
-
-								@Override
-								public void onDateSet(DatePicker p1, int p2, int p3, int p4)
-								{
-									born.setText(p4 + "/" + p3 + "/" + p2);
-									born.clearFocus();
-								}
-							}, 2000, c.get(Calendar.MONTH), c.get(c.DAY_OF_MONTH)).show();
-					}
-				}
-			});
-
-		// Create dialog
-		AlertDialog add = new AlertDialog.Builder(this)
-			.setTitle("Add new person.")
-			.setView(layout)
-			.setCancelable(false)
-			.setPositiveButton("Add", null)
-			.setNegativeButton("Cancel", null)
-			.show();
-		add.getButton(Dialog.BUTTON_POSITIVE).setOnClickListener(new OnClickListener(){
-				boolean hasError = false;
-				String sex_text;
-				String group_text;
-				@Override
-				public void onClick(View p1)
-				{
-
-					String name_text = name.getText().toString();
-					String born_text = born.getText().toString();
-					String phone_text = phone.getText().toString();
-					String address_text = address.getText().toString();
-
-					if (name_text.length() >= 2) // if it has 2 words
-					{
-						name.setError("Invalied Text");
-						hasError = true;
-					}
-
-					if (born_text.isEmpty())
-					{
-						born.setError("Please inserit date");
-						hasError = true;
-					}
-
-					if (!born_text.contains("/") && born_text.length() > 10 &&born_text.length() < 8)
-					{
-						born.setError("Error data Format");
-						hasError = true;
-					}
-
-					if (phone_text.isEmpty())
-					{
-						phone.setError("Please inserit phone number!");
-						hasError = true;
-					}
-
-					if (phone_text.trim().length() < 10 && phone_text.trim().length() >= 14)
-					{
-						phone.setError("Please inserit correct phone number!");
-						hasError = true;
-					}
-
-					sex.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-
-							@Override
-							public void onCheckedChanged(RadioGroup p1, int p2)
-							{
-								if (p2 == R.id.add_person_sex_m)
-								{
-									sex_text = "M";
-								}
-								else
-								{
-									sex_text = "F";
-								}
-							}
-						});
-					group.setOnCheckedChangeListener(new OnCheckedChangeListener(){
-
-
-							@Override
-							public void onCheckedChanged(RadioGroup p1, int p2)
-							{
-								if (p2 == R.id.add_person_group_1)
-								{
-									group_text = "1";
-								}
-								else if (p2 == R.id.add_person_group_2)
-								{
-									group_text = "2";
-								}
-								else
-								{
-									group_text = "3";
-								}
-							}
-						});
-					if (hasError)
-						return;
-					// upload files
-
-				}
-			});
-	}
+	private TextInputLayout address;
 
     @Override
     public void initContentView()
 	{
         setContentView(R.layout.activity_home);
-		addPerson();
     }
 
     @Override
@@ -191,49 +51,31 @@ public class HomeActivity extends BaseActivity
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+		
+        final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(
+                R.id.toolbar_layout);
+        collapsingToolbar.setTitleEnabled(false);
+    
         mDrawerLayout = (DrawerLayout) findViewById(R.id.id_drawerlayout);
         mNavigationView = (NavigationView) findViewById(R.id.id_navigationview);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         viewPager = (ViewPager) findViewById(R.id.pager);
-
-
+		viewPager.setOffscreenPageLimit(5);
+	
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view)
 				{
-
-					AlertDialog.Builder dialog = new AlertDialog.Builder(HomeActivity.this);
-					dialog.setTitle("Add Point");
-					View layout = LayoutInflater.from(HomeActivity.this).inflate(R.layout.point, null);
-					dialog.setMessage("Please Type number of Points.");
-					dialog.setView(layout);
-					final EditText a = (EditText) layout.findViewById(R.id.a);
-					final EditText b = (EditText) layout.findViewById(R.id.b);
-					final EditText c = (EditText) layout.findViewById(R.id.c);
-					dialog.setPositiveButton("Ok", new DialogInterface.OnClickListener(){
-
-							@Override
-							public void onClick(DialogInterface p1, int p2)
-							{
-								// TODO: Implement this method  
-								String aa = a.getText().toString().trim();
-								String bb = b.getText().toString().trim();
-								String cc = c.getText().toString().trim();
-
-								aa = (aa.isEmpty() ? "0" : aa);
-								bb = (bb.isEmpty() ? "0" : bb);
-								cc = (cc.isEmpty() ? "0" : cc);
-
-								//	put(Integer.valueOf(aa), Integer.valueOf(bb), Integer.valueOf(cc));
-							}
-						});
-					dialog.setNegativeButton("Cancel", null);
-					dialog.setCancelable(false);
-					dialog.show();
+					if (Utils.isFastClick()) {
+						// 进行点击事件后的逻辑操作
+						NewPersonDialog newPerson = new NewPersonDialog(HomeActivity.this, mHandler);
+						newPerson.create(viewPager.getCurrentItem());
+					}
+					
 				}
 			});
+
         /**
          * init DrawLayout
          */
@@ -252,7 +94,6 @@ public class HomeActivity extends BaseActivity
         currentUserAvater = (CircleImageView) navheaderView.findViewById(R.id.current_userAvater);
         currentUserName = (TextView) navheaderView.findViewById(R.id.current_userName);
         currentUserSignature = (TextView) navheaderView.findViewById(R.id.current_userSignature);
-
     }
 
     @Override
@@ -260,10 +101,14 @@ public class HomeActivity extends BaseActivity
 	{
 
 	}
+	
+
+
 
     @Override
     public void initData()
 	{
+
 
         currentUserAvater.setImageResource(R.drawable.default_avater);
         currentUserName.setText("Admin");
@@ -283,15 +128,65 @@ public class HomeActivity extends BaseActivity
     private void setupViewPager(ViewPager viewPager)
 	{
         adapter = new HomeViewPagerAdapter(getSupportFragmentManager(), this);
-        adapter.addFragment(new HomeTabFragment1().newInstance("Page1"), "第一组");
-        adapter.addFragment(new HomeTabFragment2().newInstance("Page2"), "第二组");
-        adapter.addFragment(new HomeTabFragment3().newInstance("Page3"), "第三组");
-	    viewPager.setAdapter(adapter);
+        adapter.addFragment(new Group1(this).newInstance(this), "第一组");
+        adapter.addFragment(new Group2(this).newInstance(this), "第二组");
+        adapter.addFragment(new Group3(this).newInstance(this), "第三组");
+	    adapter.addFragment(new Group4(this).newInstance(this), "未分组");
+	    
+		viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
     }
+	
+	private static Handler mHandler=new Handler(){
+		@Override
+		public void handleMessage(Message msg)
+		{
+			super.handleMessage(msg);
+			switch(msg.what)
+			{
+				case 0: // error this app
+				    App.sendToast("0");
+					break;
+				case -21: // falied
+				    App.sendToast("-1");
+				    break;
+				case 21: // done
+				    App.sendToast("1");
+					Group1.init();
+					Group2.init();
+					Group3.init();
+					Group4.init();
+					break;
+			}
 
+		}
+	};
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data)
+	{
+		if (requestCode == Utils.PLACE_AUTOCOMPLETE_REQUEST_CODE)
+		{
+			if (resultCode == RESULT_OK)
+			{
+				Place place = PlaceAutocomplete.getPlace(this, data);
+				if (NewPersonDialog.address != null)
+					NewPersonDialog.address.getEditText().setText(place.getAddress());
+				Log.i(TAG, "Place: " + place.getName());
+			}
+			else if (resultCode == PlaceAutocomplete.RESULT_ERROR)
+			{
+				Status status = PlaceAutocomplete.getStatus(this, data);
+				// TODO:Handle the error.
+				Log.i(TAG, status.getStatusMessage());
+
+			}
+			else if (resultCode == RESULT_CANCELED)
+			{
+				// The user canceled the operation.
+			}
+		}
+	}
 
     /**
      * 设置NavigationView中menu的item被选中后要执行的操作
@@ -345,7 +240,9 @@ public class HomeActivity extends BaseActivity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings)
 		{
-			invalidata("admin");
+			Group1.init();
+			//invalidata("admin");
+			GroupBase.init();
             return true;
         }
 

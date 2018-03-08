@@ -7,10 +7,11 @@ import android.util.*;
 import java.util.*;
 import okhttp3.*;
 import xyz.whyle.pointcount.*;
+import android.content.SharedPreferences.*;
+import android.widget.Toast;
 
 public class App extends Application
 {
-
 	public static SharedPreferences share;
 
 	public static ArrayList<MyData> data;
@@ -20,10 +21,15 @@ public class App extends Application
 	public static Request request;
 
 	public static String body = "";
+
+	public static SharedPreferences.Editor editor;
+
+	public static Context mContext;
 	@Override
 	public void onCreate()
 	{
 		super.onCreate();
+		this.mContext = this;
 		Log.i("APP", "------->Is start");
 		
 		client = new OkHttpClient.Builder().build();
@@ -31,27 +37,39 @@ public class App extends Application
 		Log.i("APP", "------->client:" + client);
 		Log.i("APP", "------->handler:" + mHandler);
 		
-		share = getSharedPreferences("user", MODE_PRIVATE);
+		share = getSharedPreferences("AppSetting", MODE_PRIVATE);
+		editor = share.edit();
 	}
 	
-	public static OkHttpClient connectServer(String url, RequestBody post)
+	
+	public static String getUser()
 	{
-		if (url == null && post == null && mHandler == null)
-			return null;
-			
-		Log.i("APP", "------->Start Get From:" + url);
-		Log.i("APP", "------->Post:" + post);
-		
-		request = new Request.Builder()
-			.url(url)
-			.post(post)
-			.build();
-		
-		return client;
+		return share.getString("user","");
+	}
+	public static void setUser(String str)
+	{
+		editor.putString("user",str).commit();
 	}
 	
 	
-
+	
+	
+	public static boolean is(Context  context)
+	{ 
+		//是否有网络连接
+		if (context != null)
+		{ 
+			ConnectivityManager 
+				mConnectivityManager = (ConnectivityManager) context .getSystemService(Context.CONNECTIVITY_SERVICE); 
+			NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo(); 
+			if (mNetworkInfo != null)
+			{ 
+				return mNetworkInfo.isAvailable(); 
+			} 
+		} 
+		return false; 
+	} 
+	
 	// Open Google Map
 	public static void openMap(Context mContext, String position)
 	{
@@ -63,5 +81,21 @@ public class App extends Application
 		Log.i("APP", "------->openMap():" + "opend!");
 	}
 	
-
+	public static int getThemeAccentColor(Context context) {
+		int colorAttr;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			colorAttr = android.R.attr.colorAccent;
+		} else {
+			//Get colorAccent defined for AppCompat
+			colorAttr = context.getResources().getIdentifier("colorAccent", "attr", context.getPackageName());
+		}
+		TypedValue outValue = new TypedValue();
+		context.getTheme().resolveAttribute(colorAttr, outValue, true);
+		return outValue.data;
+	}
+	
+	public static void sendToast(String msg)
+	{
+		Toast.makeText(mContext, msg,Toast.LENGTH_LONG).show();
+	}
 }

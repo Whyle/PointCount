@@ -5,41 +5,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    tools:context=".MainActivity">
+    android:fitsSystemWindows="true">
 
+    <!-- 去掉fitSystemWindows后会让状态栏变为粉红色-->
     <android.support.design.widget.AppBarLayout
-        android:layout_height="wrap_content"
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
+        <!-- 去掉这个theme就会使文字颜色变为黑色-->
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:layout_scrollFlags="scroll|enterAlways"/>
+            android:layout_height="250dp"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <ImageView
+                android:id="@+id/imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/show2"
+                app:layout_collapseMode="parallax"
+                app:layout_collapseParallaxMultiplier="0.7"
+                android:fitsSystemWindows="true"/>
+			<!-- 去掉这个fitSystem状态栏会变成蓝色-->
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            app:tabTextColor="@color/tab_text_color"
-            app:tabSelectedTextColor="@color/text__white"
-            app:tabIndicatorColor="@color/white"
-            app:tabGravity="fill"
-            app:tabMode="fixed"/>
+            <android.support.v7.widget.Toolbar
+                android:gravity="top"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:minHeight="?attr/actionBarSize"
+                app:titleMarginTop="15dp"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+            <android.support.design.widget.TabLayout
 
+                android:id="@+id/tab_layout"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:layout_gravity="bottom"
+                app:tabIndicatorColor = "#FFFFFF"
+                app:tabTextColor = "#FFFFFF"
+                app:tabSelectedTextColor = "#FFFFFF" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+	<android.support.v4.view.ViewPager
+		android:id="@+id/pager"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab"
@@ -47,7 +68,7 @@
 		android:layout_height="wrap_content"
 		android:layout_margin="@dimen/fab_margin"
 		android:src="@drawable/ic_plus"
-		android:layout_gravity="right|bottom"
-	/>
+		android:layout_gravity="right|bottom"/>
 
 </android.support.design.widget.CoordinatorLayout>
+

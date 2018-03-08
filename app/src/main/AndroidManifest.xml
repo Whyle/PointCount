@@ -6,10 +6,13 @@
 	<application
 		android:name=".app.App"
 		android:allowBackup="true"
-		android:icon="@drawable/ic_launcher"
+		android:icon="@mipmap/ic_launcher"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme"
 		android:resizeableActivity="true">
+		<meta-data 
+			android:name="com.google.android.geo.API_KEY" 
+			android:value="AIzaSyBhpjJz9bsgRMdb6ZT-WgtVHSz5CWH3Ac0"/>
 		<activity
 			android:name=".avtivity.HomeActivity"
 			android:label="@string/app_name"

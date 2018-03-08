@@ -1,172 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	android:paddingLeft="30dp"
-	android:paddingRight="30dp">
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:gravity="center_horizontal"
+	android:orientation="vertical"
+	android:padding="25dp">
 
-	<TableLayout
-		android:layout_width="wrap_content"
-		android:layout_height="match_parent"
-		android:background="#fff"
-		android:stretchColumns="1">
+	<ScrollView
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent">
 
-		<TableRow
-			android:gravity="center_vertical"
-			android:layout_marginBottom="10dp">
+		<LinearLayout
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
 
-			<TextView
+			<android.support.design.widget.TextInputLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="名字:"
-				android:textAppearance="?android:attr/textAppearanceMedium"/>
+				android:id="@+id/add_person_name">
 
-			<EditText
-				android:id="@+id/add_person_name"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:selectAllOnFocus="true"/>
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="名字(中文)"/>
 
-		</TableRow>
-
-		<TableRow
-			android:gravity="center_vertical"
-			android:layout_marginBottom="10dp">
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="性别:"
-				android:textAppearance="?android:attr/textAppearanceMedium"/>
+			</android.support.design.widget.TextInputLayout>
 
 			<RadioGroup
 				android:id="@+id/add_person_sex"
 				android:layout_height="wrap_content"
 				android:layout_width="match_parent"
-				android:orientation="horizontal">
+				android:orientation="horizontal"
+				android:gravity="center_horizontal"
+				android:weightSum="12">
 
 				<RadioButton
-					android:id="@+id/add_person_sex_m"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
-					android:text="男"
+					android:layout_weight="2"
+					android:text="男生"
 					android:checked="true"
-					android:layout_weight="1.0"/>
+					android:id="@+id/add_person_sex_m"/>
 
 				<RadioButton
-					android:id="@+id/add_person_sex_f"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
-					android:text="女"
-					android:layout_weight="1.0"/>
+					android:layout_weight="2"
+					android:text="女生"
+					android:id="@+id/add_person_sex_f"/>
 
 			</RadioGroup>
 
-		</TableRow>
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="match_parent"
+				android:orientation="horizontal"
+				android:weightSum="12"
+				android:gravity="bottom">
 
-		<TableRow
-			android:gravity="center_vertical"
-			android:layout_marginBottom="10dp">
+				<android.support.design.widget.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="10"
+					android:id="@+id/add_person_born">
 
-			<TextView
+					<EditText
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:drawableRight="@drawable/calendar"
+						android:hint="生日(31/01/2018)"
+						android:inputType="date"/>
+
+				</android.support.design.widget.TextInputLayout>
+
+			</LinearLayout>
+
+			<android.support.design.widget.TextInputLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="生日:"
-				android:textAppearance="?android:attr/textAppearanceMedium"/>
+				android:id="@+id/add_person_phone">
 
-			<EditText
-				android:id="@+id/add_person_born"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:hint="31/01/2018"
-				android:inputType="date"/>
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="电话"
+					android:inputType="phone"/>
 
-		</TableRow>
-
-		<TableRow
-			android:gravity="center_vertical"
-			android:layout_marginBottom="10dp">
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="电话:"
-				android:textAppearance="?android:attr/textAppearanceMedium"/>
-
-			<EditText
-				android:id="@+id/add_person_phone"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:hint="请输入你的电话号码"
-				android:selectAllOnFocus="true"
-				android:inputType="phone"/>
-
-		</TableRow>
-
-		<TableRow
-			android:gravity="center_vertical"
-			android:layout_marginBottom="10dp">
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="分组:"
-				android:textAppearance="?android:attr/textAppearanceMedium"/>
+			</android.support.design.widget.TextInputLayout>
 
 			<RadioGroup
-				android:id="@+id/add_person_group"
 				android:layout_height="wrap_content"
 				android:layout_width="match_parent"
-				android:orientation="horizontal">
+				android:orientation="horizontal"
+				android:gravity="center_vertical"
+				android:weightSum="12"
+				android:id="@+id/add_person_group">
 
 				<RadioButton
-					android:id="@+id/add_person_group_1"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
+					android:layout_weight="2.5"
 					android:text="第一组"
 					android:checked="true"
-					android:layout_weight="1.0"/>
+					android:id="@+id/add_person_group1"/>
 
 				<RadioButton
-					android:id="@+id/add_person_group_2"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
+					android:layout_weight="2.5"
 					android:text="第二组"
-					android:layout_weight="1.0"/>
+					android:id="@+id/add_person_group2"/>
 
 				<RadioButton
-					android:id="@+id/add_person_group_3"
 					android:layout_height="wrap_content"
 					android:layout_width="wrap_content"
+					android:layout_weight="2.5"
 					android:text="第三组"
-					android:layout_weight="1.0"/>
+					android:id="@+id/add_person_group3"/>
+
+				<RadioButton
+					android:layout_height="wrap_content"
+					android:layout_width="wrap_content"
+					android:layout_weight="2.5"
+					android:text="无分组"
+					android:id="@+id/add_person_groupnone"/>
 
 			</RadioGroup>
 
-		</TableRow>
-
-		<TableRow
-			android:gravity="center_vertical"
-			android:layout_marginBottom="10dp">
-
-			<TextView
+			<android.support.design.widget.TextInputLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="地址:      "
-				android:textAppearance="?android:attr/textAppearanceMedium"/>
+				android:id="@+id/add_person_address">
 
-			<EditText
-				android:id="@+id/add_person_address"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:hint="Via bernina, 18 Padova"
-				android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ,，."
-				android:inputType="textPostalAddress"/>
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:drawableRight="@drawable/google_maps"
+					android:hint="地址(可选)"
+					android:inputType="textPostalAddress"/>
 
-		</TableRow>
+			</android.support.design.widget.TextInputLayout>
 
-	</TableLayout>
+		</LinearLayout>
+
+	</ScrollView>
 
 </LinearLayout>
-

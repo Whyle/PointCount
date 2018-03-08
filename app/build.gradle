@@ -1,27 +1,45 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.0"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "xyz.whyle.pointcount"
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
-        release {
+		 debug {
+            versionNameSuffix "-debug"
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable true
+            zipAlignEnabled false
+            shrinkResources false
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+        }
+
+        release {
+            debuggable false
+            minifyEnabled true
+            zipAlignEnabled true
+            //移除无用的resource文件
+            shrinkResources true
+            proguardFile 'proguard-rules.pro' // 'proguard.cfg'
+            signingConfig signingConfigs.myownsignname
+            buildConfigField "boolean", "LOG_DEBUG", "false"
         }
     }
 }
 
 dependencies {
+	compile "com.google.android.gms:play-services-gcm:8.4.0"
+    compile 'com.google.android.gms:play-services-location:8.4.0'
 	compile 'com.android.support:design:24.0.0'
 	compile 'com.android.support:cardview-v7:24.0.0'
 	compile 'com.android.support:appcompat-v7:24.0.0'
+	compile 'com.google.code.gson:gson:+'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
