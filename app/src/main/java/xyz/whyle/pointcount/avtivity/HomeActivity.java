@@ -39,6 +39,8 @@ public class HomeActivity extends BaseActivity
 	public String s;
 	private TextInputLayout address;
 
+	public static CoordinatorLayout rootLayout;
+
     @Override
     public void initContentView()
 	{
@@ -55,7 +57,8 @@ public class HomeActivity extends BaseActivity
         final CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(
                 R.id.toolbar_layout);
         collapsingToolbar.setTitleEnabled(false);
-    
+		rootLayout = (CoordinatorLayout) findViewById(R.id.root_layout);
+		
         mDrawerLayout = (DrawerLayout) findViewById(R.id.id_drawerlayout);
         mNavigationView = (NavigationView) findViewById(R.id.id_navigationview);
         tabLayout = (TabLayout) findViewById(R.id.tab_layout);

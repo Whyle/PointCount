@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.graphics.drawable.animated.BuildConfig;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,24 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import xyz.whyle.pointcount.MyData;
 import xyz.whyle.pointcount.R;
 import xyz.whyle.pointcount.Utils;
 import xyz.whyle.pointcount.adapter.RecyclerViewAdapterGroup1;
 import xyz.whyle.pointcount.app.App;
-import xyz.whyle.pointcount.server.ServerData;
-import xyz.whyle.pointcount.server.PersonDetail;
-import xyz.whyle.pointcount.MyData;
-import android.view.Gravity;
-import android.support.v7.widget.PopupMenu;
-import android.widget.PopupMenu.OnMenuItemClickListener;
-import android.view.MenuItem;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import java.util.Calendar;
-import android.os.SystemClock;
 import xyz.whyle.pointcount.server.EditProfile;
+import xyz.whyle.pointcount.server.PersonDetail;
+import xyz.whyle.pointcount.server.ServerData;
+import xyz.whyle.pointcount.avtivity.HomeActivity;
 
 
 public class Group1 extends Fragment
@@ -150,7 +143,7 @@ public class Group1 extends Fragment
 				{
 					// TODO: Implement this method
 					EditProfile edit = new EditProfile(mContext, data).create(view, handler);
-
+					
 				}
 
 				@Override

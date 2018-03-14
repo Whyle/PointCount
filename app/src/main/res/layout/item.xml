@@ -11,18 +11,107 @@
 	android:orientation="horizontal">
 
 	<LinearLayout
-		android:id="@+id/root"
+		android:id="@+id/item_root"
 		android:background="?attr/selectableItemBackground"
 		android:clickable="true"
 		android:layout_height="wrap_content"
 		android:layout_width="match_parent"
-		android:orientation="horizontal"
-		android:padding="10dp">
+		android:orientation="vertical"
+		android:padding="15dp">
 
-		<TextView
-			android:layout_width="wrap_content"
+		<LinearLayout
 			android:layout_height="wrap_content"
-			android:id="@+id/point"/>
+			android:layout_width="wrap_content"
+			android:orientation="horizontal">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="Yihao Zhuo"
+				android:id="@+id/item_name"/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLarge"
+				android:text="♂ ♀"
+				android:layout_marginLeft="10dp"
+				android:id="@+id/item_sex"/>
+
+		</LinearLayout>
+		
+		<LinearLayout
+			android:layout_height="wrap_content"
+			android:layout_width="wrap_content"
+			android:orientation="vertical"
+			android:visibility="gone"
+			android:id="@+id/item_gone_layout">
+			
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:layout_margin="10dp">
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="生日："/>
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceMedium"
+				android:text="14/12/2018"
+				android:id="@+id/item_birthday"/>
+			</LinearLayout>
+			
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_margin="10dp"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="电话："/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="3271475826"
+					android:id="@+id/item_phone"/>
+
+			</LinearLayout>
+			<LinearLayout
+				android:layout_height="wrap_content"
+				android:layout_width="wrap_content"
+				android:layout_margin="10dp"
+				android:orientation="horizontal">
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="地址："/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textAppearance="?android:attr/textAppearanceMedium"
+					android:text="3271475826"
+					android:id="@+id/item_address"/>
+
+			</LinearLayout>
+
+			
+			
+		</LinearLayout>
+		
 
 	</LinearLayout>
 

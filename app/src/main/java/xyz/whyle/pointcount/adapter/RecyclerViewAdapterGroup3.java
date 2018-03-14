@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import xyz.whyle.pointcount.MyData;
 import xyz.whyle.pointcount.R;
-import android.view.View.OnLongClickListener;
 
 public class RecyclerViewAdapterGroup3 extends RecyclerView.Adapter<RecyclerViewAdapterGroup3.ViewHolder>
 {
@@ -30,14 +30,30 @@ public class RecyclerViewAdapterGroup3 extends RecyclerView.Adapter<RecyclerView
 		private TextView point;
 
 		private LinearLayout root;
+
+		private TextView name;
+
+		private TextView sex;
+
+		private TextView birthday;
+
+		private TextView phone;
+
+		private TextView address;
+
+		private LinearLayout goneroot;
 		// each data item is just a string in this case
 
 		public ViewHolder(View v) {
 			super(v);
 			cv = (CardView)v.findViewById(R.id.cv);
-			point = (TextView)v.findViewById(R.id.point);
-			root = (LinearLayout)v.findViewById(R.id.root);
-
+			name = (TextView)v.findViewById(R.id.item_name);
+			sex = (TextView)v.findViewById(R.id.item_sex);
+			birthday = (TextView)v.findViewById(R.id.item_birthday);
+			phone = (TextView)v.findViewById(R.id.item_phone);
+			address = (TextView)v.findViewById(R.id.item_address);
+			root = (LinearLayout)v.findViewById(R.id.item_root);
+			goneroot = (LinearLayout)v.findViewById(R.id.item_gone_layout);
 		}
 	}
 
@@ -81,29 +97,25 @@ public class RecyclerViewAdapterGroup3 extends RecyclerView.Adapter<RecyclerView
 		// - get element from your dataset at this position
 		// - replace the contents of the view with that element
 
-		holder.point.setText(mDataset.get(position).getName());
+		holder.name.setText(mDataset.get(position).getName());
+		holder.sex.setText(mDataset.get(position).getSex());
+		holder.birthday.setText(mDataset.get(position).getBirthday());
+		holder.phone.setText(mDataset.get(position).getPhone());
+		holder.address.setText(mDataset.get(position).getAddress());
+		holder.root.setOnClickListener(new OnClickListener(){
 
+				@Override
+				public void onClick(View p1)
+				{
+					if(holder.goneroot.getVisibility()==View.GONE)
+						holder.goneroot.setVisibility(View.VISIBLE);
+					else
+						holder.goneroot.setVisibility(View.GONE);
+				}
+			});
 		if (mOnItemClickListener!=null){
 
-			holder.root.setOnClickListener(new View.OnClickListener() {
-
-					// 两次点击按钮之间的点击间隔不能少于1000毫秒
-					private static final int MIN_CLICK_DELAY_TIME = 500;
-					private long lastClickTime = 0;
-
-					@Override
-					public void onClick(View v)
-					{
-						long curClickTime = System.currentTimeMillis();
-						if((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
-							// 超过点击间隔后再将lastClickTime重置为当前点击时间
-							lastClickTime = curClickTime;
-							mOnItemClickListener.onItemClick(holder.itemView, mDataset.get(position));
-
-						}
-						Log.i("onclick", " " + v + " " + position + " " + mDataset);
-					}
-				});
+			
 			holder.root.setOnLongClickListener(new View.OnLongClickListener(){
 
 					@Override
